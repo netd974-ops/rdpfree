@@ -24,11 +24,12 @@ jobs:
           
           # 3. ربط وتفعيل السيرفر بحسابك عبر مفتاح التوثيق الفريد الخاص بك
           Write-Host "Connecting Server to your Remote.it Account..."
-          & "C:\Program Files\remoteit-cli\remoteit.exe" register "TJBXSV2UM3PS"
-          & "C:\Program Files\remoteit-cli\remoteit.exe" add --port 3389 --protocol tcp --name "Cloud-RDP"
+          & "C:\Program Files\remoteit\remoteit.exe" register "TJBXSV2UM3PS"
+          & "C:\Program Files\remoteit\remoteit.exe" add --port 3389 --protocol tcp --name "Cloud-RDP"
           
           # 4. إبقاء الخادم حياً ومستقراً لـ 4 ساعات كاملة
           python -c "import time; print('RDP Tunnel is live!'); time.sleep(14400)"
+
 
 
 
