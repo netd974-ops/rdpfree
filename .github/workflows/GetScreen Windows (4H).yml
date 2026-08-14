@@ -16,9 +16,9 @@ jobs:
           Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
           net user runneradmin "Password123!"
           
-          # تحميل وتثبيت أداة التانيل الحرة والتلقائية
-          Invoke-WebRequest -Uri "https://localtonet.com" -OutFile "localtonet.zip"
-          Expand-Archive -Path "localtonet.zip" -DestinationPath "."
+          # تحميل الملف التنفيذي المباشر دون الحاجة لفك ضغط
+          $url = "https://github.com"
+          Invoke-WebRequest -Uri $url -OutFile "localtonet.exe"
           
           # تشغيل الاتصال المباشر لـ RDP بدون حظر أو تفعيل بطاقات
           Write-Host "Starting Free RDP Tunnel via Localtonet..."
