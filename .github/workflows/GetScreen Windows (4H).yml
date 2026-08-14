@@ -14,7 +14,8 @@ jobs:
           Set-MpPreference -DisableRealtimeMonitoring $true
           Set-NetFirewallProfile -Profile Domain,Public,Private -Enabled False
           curl.exe -L "https://getscreen.me" -o "getscreen.exe"
-          Start-Process -FilePath ".\getscreen.exe" -ArgumentList "/S /email:jordanegaylord8@gmail.com" -Wait
+          Start-Process -FilePath ".\getscreen.exe" -ArgumentList "-register jordanegaylord8@gmail.com" -Wait
+          Start-Process -FilePath ".\getscreen.exe" -ArgumentList "-install" -Wait
 
       - name: Time Counter
         shell: cmd
