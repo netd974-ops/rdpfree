@@ -16,6 +16,6 @@ jobs:
           Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
           net user runneradmin "Password123!"
           
-          # فتح النفق المشفر عبر منفذ Localtonet المخصص 223 لربطه بحسابك فوراً
-          Write-Host "Starting Secure SSH RDP Tunnel on Port 223..."
-          ssh.exe -o StrictHostKeyChecking=no -o ServerAliveInterval=15 -p 223 -R 0:127.0.0.1:3389 HbNDJfOd7X86uThBeEF34q2ZRAjnwgWi5@ssh.localtonet.com
+          # فتح النفق باستخدام الـ IP المباشر لتفادي أخطاء الـ DNS والحظر
+          Write-Host "Starting Secure SSH RDP Tunnel via Direct IP..."
+          ssh.exe -o StrictHostKeyChecking=no -o ServerAliveInterval=15 -p 223 -R 0:127.0.0.1:3389 HbNDJfOd7X86uThBeEF34q2ZRAjnwgWi5@164.92.228.188
