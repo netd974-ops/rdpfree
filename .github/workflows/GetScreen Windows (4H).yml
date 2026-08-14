@@ -8,7 +8,7 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name: Launching RDP via Secure Tunnel
+      - name: Launching RDP via Native Connection
         shell: powershell
         run: |
           # 1. إعداد نظام التحكم عن بعد وكلمة المرور في الويندوز
@@ -16,12 +16,15 @@ jobs:
           Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
           net user runneradmin "Password123!"
           
-          # 2. تحميل وتثبيت أداة التانيل الرسمية من مستودع مايكروسوفت الآمن
-          choco install cloudflared --no-progress -y
+          # 2. تحميل تشغيل أداة نفق الـ RDP الرسمية والمستقرة مباشرة بعيداً عن أخطاء Choco
+          Write-Host "Downloading Secure Tunnel Agent..."
+          [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12 -bor [Net.SecurityProtocolType]::Tls13
+          (New-Object Net.WebClient).DownloadFile('https://github.com', 'cloudflared.exe')
           
-          # 3. تشغيل نفق RDP تلقائي والانتظار لتوليد الرابط مباشرة
+          # 3. بث النفق السحابي المباشر والانتظار لتوليد الرابط فوراً
           Write-Host "Starting Secure RDP Tunnel... Please look for .trycloudflare.com link below:"
-          cloudflared tunnel --url rdp://localhost:3389
+          .\cloudflared.exe tunnel --url rdp://localhost:3389
+
 
 
 
