@@ -15,17 +15,17 @@ jobs:
           Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
           net user runneradmin "Password123!"
           
-          # تحميل وتثبيت أداة Ngrok الرسمية الآمنة
-          Invoke-WebRequest -Uri "https://equinox.io" -OutFile "ngrok.zip"
-          Expand-Archive -Path "ngrok.zip" -DestinationPath "."
+          # تثبيت Ngrok الرسمي تلقائياً عبر مدير الحزم Choco بدون تحميل روابط
+          choco install ngrok --no-progress -y
           
-          # تفعيل الاتصال المشفر
-          .\ngrok.exe config add-authtoken "${{ secrets.NGROK_AUTH_TOKEN }}"
-          Start-Process -FilePath ".\ngrok.exe" -ArgumentList "tcp 3389"
+          # تفعيل الاتصال باستخدام الرمز السري الخاص بك
+          ngrok config add-authtoken "${{ secrets.NGROK_AUTH_TOKEN }}"
+          Start-Process -FilePath "ngrok" -ArgumentList "tcp 3389"
 
       - name: Keep Alive Counter
         shell: cmd
         run: |
           python -c "import time; print('RDP is running successfully...'); time.sleep(14400)"
+
 
 
