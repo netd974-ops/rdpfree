@@ -16,14 +16,20 @@ jobs:
           Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
           net user runneradmin "Password123!"
           
-          # 2. تشغيل السكربت الرسمي لشركة Remote.it لتثبيت الأداة وحقن مفتاحك الشخصي تلقائياً
-          Write-Host "Installing and Connecting Server to Remote.it..."
-          $env:adddevice_key = "TJBXSV2UM3PS"
+          # 2. تحميل الأداة الرسمية المباشرة بصيغة msi وتثبيتها فوراً داخل النظام
+          Write-Host "Downloading and Installing Remote.it CLI..."
           [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12 -bor [Net.SecurityProtocolType]::Tls13
-          iex (New-Object Net.WebClient).DownloadString('https://remote.it')
+          Invoke-WebRequest -Uri "https://remote.it" -OutFile "remoteit.msi"
+          Start-Process msiexec.exe -ArgumentList "/i remoteit.msi /quiet /qn /norestart" -Wait
           
-          # 3. إبقاء الخادم حياً ومستقراً لـ 4 ساعات
+          # 3. ربط وتفعيل السيرفر بحسابك عبر مفتاح التوثيق الفريد الخاص بك
+          Write-Host "Connecting Server to your Remote.it Account..."
+          & "C:\Program Files\remoteit-cli\remoteit.exe" register "TJBXSV2UM3PS"
+          & "C:\Program Files\remoteit-cli\remoteit.exe" add --port 3389 --protocol tcp --name "Cloud-RDP"
+          
+          # 4. إبقاء الخادم حياً ومستقراً لـ 4 ساعات كاملة
           python -c "import time; print('RDP Tunnel is live!'); time.sleep(14400)"
+
 
 
 
