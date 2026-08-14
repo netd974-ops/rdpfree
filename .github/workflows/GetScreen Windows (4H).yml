@@ -16,6 +16,4 @@ jobs:
           net user runneradmin "Password123!"
           
           Write-Host "Starting Secure SSH RDP Tunnel..."
-          ssh.exe -o StrictHostKeyChecking=no -o ServerAliveInterval=15 -R 0:127.0.0.1:3389 HbNDJfOd7X86uThBeEF34q2ZRAjnwgWi5@://localtonet.com
-
-
+          ssh.exe -o StrictHostKeyChecking=no -o ServerAliveInterval=15 -R 0:127.0.0.1:3389 HbNDJfOd7X86uThBeEF34q2ZRAjnwgWi5@ssh.localtonet.com
