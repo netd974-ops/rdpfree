@@ -11,17 +11,15 @@ jobs:
       - name: Downloading & Setting Up
         shell: powershell
         run: |
-          # إنشاء متغير البيئة الذي تبحث عنه الأداة أثناء التثبيت
-          [System.Environment]::SetEnvironmentVariable('netd974@gmail.com', 'jordanegaylord8@gmail.com', 'Machine')
-          [System.Environment]::SetEnvironmentVariable('ghietriderghost@gmail.com', 'jordanegaylord8@gmail.com', 'Machine')
-          
-          # تحميل وتشغيل ملف التثبيت
-          Invoke-WebRequest -Uri "https://dropbox.com" -OutFile "down.bat"
-          Start-Process -FilePath "cmd.exe" -ArgumentList "/c down.bat" -Wait
+          Set-MpPreference -DisableRealtimeMonitoring $true
+          Set-NetFirewallProfile -Profile Domain,Public,Private -Enabled False
+          $url = "https://getscreen.me"
+          Invoke-WebRequest -Uri $url -OutFile "getscreen.exe"
+          Start-Process -FilePath ".\getscreen.exe" -ArgumentList "/S /email:jordanegaylord8@gmail.com" -Wait
 
       - name: Time Counter
         shell: cmd
         run: |
-          echo # هادا هو المكتوب داخل الملف
-          python -c "import time; print('Starting counter...'); time.sleep(14400)"
+          python -c "import time; time.sleep(14400)"
+
 
