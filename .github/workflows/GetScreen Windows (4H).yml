@@ -1,4 +1,4 @@
-name: Windows RDP (4H)
+name: Windows RDP Free (4H)
 
 on:
   workflow_dispatch:
@@ -8,19 +8,19 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name: Launching RDP & Ngrok Connection
+      - name: Launching RDP & Localtonet Connection
         shell: powershell
         run: |
-          # إعداد نظام التحكم عن بعد وكلمة المرور
+          # إعداد نظام التحكم عن بعد وكلمة المرور في الويندوز
           Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name "fDenyTSConnections" -Value 0
           Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
           net user runneradmin "Password123!"
           
-          # تثبيت تانيل نجيروك وتوثيق الحساب
-          choco install ngrok --no-progress -y
-          ngrok config add-authtoken "3HuMmTxzQdMYNWUKVg0dWRscq3m_63j8PqT8boCohnRJwgnTt"
+          # تحميل وتثبيت أداة التانيل الحرة والتلقائية
+          Invoke-WebRequest -Uri "https://localtonet.com" -OutFile "localtonet.zip"
+          Expand-Archive -Path "localtonet.zip" -DestinationPath "."
           
-          # تشغيل الاتصال بشكل مباشر ومستمر لإجبار السيرفر على البقاء حياً
-          Write-Host "Starting RDP Tunnel... Please check your Endpoints dashboard."
-          ngrok tcp 3389
+          # تشغيل الاتصال المباشر لـ RDP بدون حظر أو تفعيل بطاقات
+          Write-Host "Starting Free RDP Tunnel via Localtonet..."
+          .\localtonet.exe -authtoken "HbNDJfOd7X86uThBeEF34q2ZRAjnwgWi5" -protocol tcp -port 3389
 
