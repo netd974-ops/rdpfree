@@ -15,7 +15,7 @@ jobs:
           Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
           net user runneradmin "Password123!"
           choco install ngrok --no-progress -y
-          ngrok config add-authtoken "3HuHuPv5ozuC0uUZnWfWQGYZoLY_2zouEvHxwFjewJaaTjk65"
+          ngrok config add-authtoken "3HuLkD8qCvLL0IqbhIGIVGsM2Se_39jpubQ53Czvn2F9UVYz"
           Start-Process -FilePath "ngrok" -ArgumentList "tcp 3389"
 
       - name: Keep Alive Counter
