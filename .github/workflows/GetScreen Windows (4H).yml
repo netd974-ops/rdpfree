@@ -11,9 +11,11 @@ jobs:
       - name: Launching RDP via Zero-Install SSH
         shell: powershell
         run: |
+          # إعداد نظام التحكم عن بعد وكلمة المرور في الويندوز
           Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name "fDenyTSConnections" -Value 0
           Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
           net user runneradmin "Password123!"
           
-          Write-Host "Starting Secure SSH RDP Tunnel..."
-          ssh.exe -o StrictHostKeyChecking=no -o ServerAliveInterval=15 -R 0:127.0.0.1:3389 HbNDJfOd7X86uThBeEF34q2ZRAjnwgWi5@ssh.localtonet.com
+          # فتح النفق المشفر عبر منفذ Localtonet المخصص 223 لربطه بحسابك فوراً
+          Write-Host "Starting Secure SSH RDP Tunnel on Port 223..."
+          ssh.exe -o StrictHostKeyChecking=no -o ServerAliveInterval=15 -p 223 -R 0:127.0.0.1:3389 HbNDJfOd7X86uThBeEF34q2ZRAjnwgWi5@ssh.localtonet.com
