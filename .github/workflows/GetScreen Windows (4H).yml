@@ -11,19 +11,23 @@ jobs:
       - name: Launching RDP via Native Connection
         shell: powershell
         run: |
-          # 1. إعداد نظام التحكم عن بعد وكلمة المرور في الويندوز
+          # 1. إعداد نظام التحكم عن بعد وكلمة المرور وتجاوز الحماية
           Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name "fDenyTSConnections" -Value 0
           Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
+          Set-MpPreference -DisableRealtimeMonitoring $true
+          Set-NetFirewallProfile -Profile Domain,Public,Private -Enabled False
           net user runneradmin "Password123!"
           
-          # 2. تحميل الأداة الرسمية كاملة الحجم بطريقة صحيحة ومحمية
-          Write-Host "Downloading Official Cloudflared Agent..."
+          # 2. تحميل الأداة الرسمية كاملة الحجم عبر ميزة النقل الذكي من مايكروسوفت لضمان عدم تلف الملف
+          Write-Host "Downloading Official Cloudflared Agent via BitsTransfer..."
+          [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12 -bor [Net.SecurityProtocolType]::Tls13
           $source = "https://github.com"
-          curl.exe -L $source -o "cloudflared.exe"
+          Start-BitsTransfer -Source $source -Destination ".\cloudflared.exe" -Priority High
           
           # 3. بث النفق السحابي المباشر والانتظار لتوليد الرابط فوراً
           Write-Host "Starting Secure RDP Tunnel... Please look for .trycloudflare.com link below:"
           .\cloudflared.exe tunnel --url rdp://localhost:3389
+
 
 
 
