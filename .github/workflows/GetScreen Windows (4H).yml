@@ -18,9 +18,9 @@ jobs:
           
           # تثبيت تانيل نجيروك وتوثيق الحساب
           choco install ngrok --no-progress -y
-          ngrok config add-authtoken "3HuLkD8qCvLL0IqbhIGIVGsM2Se_39jpubQ53Czvn2F9UVYz"
+          ngrok config add-authtoken "3HuMmTxzQdMYNWUKVg0dWRscq3m_63j8PqT8boCohnRJwgnTt"
           
           # تشغيل الاتصال بشكل مباشر ومستمر لإجبار السيرفر على البقاء حياً
           Write-Host "Starting RDP Tunnel... Please check your Endpoints dashboard."
-          ngrok tcp 3389 --region eu
+          ngrok tcp 3389
 
