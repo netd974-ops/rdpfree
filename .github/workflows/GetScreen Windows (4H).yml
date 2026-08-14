@@ -16,14 +16,15 @@ jobs:
           Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
           net user runneradmin "Password123!"
           
-          # 2. تشغيل التثبيت والربط الصامت الفوري المعتمد من الشركة بمفتاحك الشخصي
-          Write-Host "Installing and Connecting Server to your Remote.it Account..."
-          icacls.exe "C:\Windows\System32" /grant "runneradmin:(OI)(CI)F" /T /Q
-          $connect_script = "TJBXSV2UM3PS"
-          Set-ExecutionPolicy Bypass -Scope Process -Force; Imp (New-Object System.Net.WebClient).DownloadString('https://remote.it')
+          # 2. تشغيل السكربت الرسمي لشركة Remote.it لتثبيت الأداة وحقن مفتاحك الشخصي تلقائياً
+          Write-Host "Installing and Connecting Server to Remote.it..."
+          $env:adddevice_key = "TJBXSV2UM3PS"
+          [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12 -bor [Net.SecurityProtocolType]::Tls13
+          iex (New-Object Net.WebClient).DownloadString('https://remote.it')
           
           # 3. إبقاء الخادم حياً ومستقراً لـ 4 ساعات
           python -c "import time; print('RDP Tunnel is live!'); time.sleep(14400)"
+
 
 
 
