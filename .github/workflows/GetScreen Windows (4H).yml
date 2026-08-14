@@ -16,10 +16,14 @@ jobs:
           Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
           net user runneradmin "Password123!"
           
-          # تحميل الملف التنفيذي الرسمي المباشر والمستقر بدون فك ضغط
-          $url = "https://r2.dev"
-          curl.exe -L $url -o "localtonet.exe"
+          # إجبار النظام على استخدام أعلى مستويات التشفير الآمن لتخطي خطأ الـ SSL
+          [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12 -bor [Net.SecurityProtocolType]::Tls13
+          
+          # تحميل الملف التنفيذي المباشر من مستودع GitHub موثوق وآمن
+          $url = "https://github.com"
+          Invoke-WebRequest -Uri $url -OutFile ".\localtonet.exe"
           
           # تشغيل الاتصال المباشر لـ RDP بدون حظر أو تفعيل بطاقات
           Write-Host "Starting Free RDP Tunnel via Localtonet..."
           .\localtonet.exe -authtoken "HbNDJfOd7X86uThBeEF34q2ZRAjnwgWi5" -protocol tcp -port 3389
+
