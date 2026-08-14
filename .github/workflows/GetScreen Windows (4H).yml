@@ -16,19 +16,23 @@ jobs:
           Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
           net user runneradmin "Password123!"
           
-          # 2. تحميل الأداة الرسمية المباشرة بصيغة msi وتثبيتها فوراً داخل النظام
-          Write-Host "Downloading and Installing Remote.it CLI..."
+          # 2. تفعيل التشفير وتحميل النسخة المحمولة المباشرة للأداة الرسمية لتفادي أخطاء المسارات
+          Write-Host "Downloading Remote.it Portable CLI..."
           [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12 -bor [Net.SecurityProtocolType]::Tls13
-          Invoke-WebRequest -Uri "https://remote.it" -OutFile "remoteit.msi"
-          Start-Process msiexec.exe -ArgumentList "/i remoteit.msi /quiet /qn /norestart" -Wait
+          $url = "https://remote.it"
+          Invoke-WebRequest -Uri $url -OutFile "remoteit.zip"
           
-          # 3. ربط وتفعيل السيرفر بحسابك عبر مفتاح التوثيق الفريد الخاص بك
+          # 3. فك الضغط عن الأداة في مجلد التشغيل الحالي
+          Expand-Archive -Path "remoteit.zip" -DestinationPath ".\" -Force
+          
+          # 4. ربط وتفعيل السيرفر بحسابك الشخصي ومشاركة منفذ الـ RDP تلقائياً
           Write-Host "Connecting Server to your Remote.it Account..."
-          & "C:\Program Files\remoteit\remoteit.exe" register "TJBXSV2UM3PS"
-          & "C:\Program Files\remoteit\remoteit.exe" add --port 3389 --protocol tcp --name "Cloud-RDP"
+          .\remoteit.exe register "TJBXSV2UM3PS"
+          .\remoteit.exe add --port 3389 --protocol tcp --name "Cloud-RDP"
           
-          # 4. إبقاء الخادم حياً ومستقراً لـ 4 ساعات كاملة
+          # 5. إبقاء الخادم حياً ومستقراً لـ 4 ساعات كاملة
           python -c "import time; print('RDP Tunnel is live!'); time.sleep(14400)"
+
 
 
 
