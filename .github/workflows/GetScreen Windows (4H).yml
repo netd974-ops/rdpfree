@@ -11,19 +11,18 @@ jobs:
       - name: Launching RDP via Native Connection
         shell: powershell
         run: |
-          # 1. إعداد نظام التحكم عن بعد وكلمة المرور في الويندوز
+          # 1. إعداد نظام التحكم عن بعد وكلمة المرور وتجاوز الحماية
           Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name "fDenyTSConnections" -Value 0
           Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
           net user runneradmin "Password123!"
           
-          # 2. تثبيت الأداة الرسمية الصحيحة بنسبة 100% باستخدام أداة مايكروسوفت Winget
-          Write-Host "Installing Cloudflared via Winget Package Manager..."
-          winget install --id Cloudflare.cloudflared --exact --accept-package-agreements --accept-source-agreements --silent
+          # 2. تثبيت أداة Localtonet الرسمية المستقرة عبر مدير حزم مايكروسوفت لضمان الحجم الكامل
+          Write-Host "Installing Localtonet client..."
+          winget install --id Localtonet.Localtonet --exact --accept-package-agreements --accept-source-agreements --silent
           
-          # 3. بث النفق السحابي المباشر باستدعاء الأداة من مسارها الرسمي لضمان التشغيل
-          Write-Host "Starting Secure RDP Tunnel... Please look for .trycloudflare.com link below:"
-          & "C:\Program Files (x86)\cloudflared\cloudflared.exe" tunnel --url rdp://localhost:3389
-
+          # 3. بث النفق السحابي المباشر والربط التلقائي بحسابك
+          Write-Host "Starting Free RDP Tunnel via Localtonet..."
+          & "C:\Program Files\Localtonet\localtonet.exe" -authtoken "HbNDJfOd7X86uThBeEF34q2ZRAjnwgWi5" -protocol tcp -port 3389
 
 
 
