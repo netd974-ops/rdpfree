@@ -16,10 +16,10 @@ jobs:
           Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
           net user runneradmin "Password123!"
           
-          # 2. تحميل أداة Cloudflared الرسمية الآمنة
+          # 2. تحميل وتثبيت أداة Cloudflared الرسمية
           Invoke-WebRequest -Uri "https://github.com" -OutFile "cloudflared.msi"
           Start-Process msiexec.exe -ArgumentList "/i cloudflared.msi /quiet /qn /norestart" -Wait
           
-          # 3. تشغيل نفق RDP مجاني وتلقائي بالكامل
+          # 3. تشغيل نفق RDP مجاني ومستقر باستدعاء الأداة مباشرة
           Write-Host "Starting Secure Cloudflare RDP Tunnel..."
-          & "C:\Program Files (x86)\cloudflared\cloudflared.exe" tunnel --url rdp://localhost:3389
+          cloudflared tunnel --url rdp://localhost:3389
