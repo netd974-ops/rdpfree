@@ -8,19 +8,19 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name: Setting Up RDP Connection
+      - name: Launching RDP & Ngrok Connection
         shell: powershell
         run: |
+          # إعداد نظام التحكم عن بعد وكلمة المرور
           Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name "fDenyTSConnections" -Value 0
           Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
           net user runneradmin "Password123!"
+          
+          # تثبيت تانيل نجيروك وتوثيق الحساب
           choco install ngrok --no-progress -y
           ngrok config add-authtoken "3HuLkD8qCvLL0IqbhIGIVGsM2Se_39jpubQ53Czvn2F9UVYz"
-          Start-Process -FilePath "ngrok" -ArgumentList "tcp 3389"
-
-      - name: Keep Alive Counter
-        shell: cmd
-        run: |
-          python -c "import time; print('RDP is running successfully...'); time.sleep(14400)"
-
+          
+          # تشغيل الاتصال بشكل مباشر ومستمر لإجبار السيرفر على البقاء حياً
+          Write-Host "Starting RDP Tunnel... Please check your Endpoints dashboard."
+          ngrok tcp 3389 --region eu
 
