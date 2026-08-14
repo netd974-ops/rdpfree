@@ -16,9 +16,10 @@ jobs:
           Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
           net user runneradmin "Password123!"
           
-          # 2. تحميل الأداة الرسمية الصحيحة بنسبة 100% باستخدام Curl الذكي لتفادي تلف الملفات
+          # 2. تحميل الأداة الرسمية كاملة الحجم عبر كود التشفير المباشر
           Write-Host "Downloading Official Cloudflared Agent..."
-          curl.exe -L "https://github.com" -o "cloudflared.exe"
+          $source = "https://github.com"
+          curl.exe -L $source -o "cloudflared.exe"
           
           # 3. بث النفق السحابي المباشر والانتظار لتوليد الرابط فوراً
           Write-Host "Starting Secure RDP Tunnel... Please look for .trycloudflare.com link below:"
