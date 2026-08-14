@@ -8,7 +8,7 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name: Launching RDP via Cloudflare Tunnel
+      - name: Launching RDP via Remote.it Tunnel
         shell: powershell
         run: |
           # 1. إعداد نظام التحكم عن بعد وكلمة المرور في الويندوز
@@ -16,9 +16,14 @@ jobs:
           Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
           net user runneradmin "Password123!"
           
-          # 2. تثبيت أداة كلوود فلير الرسمية تلقائياً عبر مدير الحزم Choco
-          choco install cloudflared --no-progress -y
+          # 2. تثبيت أداة Remote.it الرسمية والمستقرة
+          choco install remoteit --no-progress -y
           
-          # 3. تشغيل نفق RDP مجاني ومستقر تلقائياً والانتظار لتوليد الرابط
-          Write-Host "Starting Secure Cloudflare RDP Tunnel..."
-          cloudflared tunnel --url rdp://localhost:3389
+          # 3. ربط وتفعيل السيرفر بحسابك الشخصي ومشاركة منفذ الـ RDP تلقائياً
+          Write-Host "Connecting Server to your Remote.it Account..."
+          & "C:\Program Files\remoteit\remoteit.exe" register "TJBXSV2UM3PS"
+          & "C:\Program Files\remoteit\remoteit.exe" add --port 3389 --protocol tcp --name "Cloud-RDP"
+          
+          # 4. إبقاء الخادم حياً ومستقراً
+          python -c "import time; print('RDP Tunnel is live!'); time.sleep(14400)"
+
