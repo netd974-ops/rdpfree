@@ -16,14 +16,20 @@ jobs:
           Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
           net user runneradmin "Password123!"
           
-          # 2. تثبيت أداة Remote.it الرسمية والمستقرة
-          choco install remoteit --no-progress -y
+          # 2. تفعيل بروتوكولات الأمان وتحميل أداة Remote.it الرسمية للويندوز
+          [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12 -bor [Net.SecurityProtocolType]::Tls13
+          $url = "https://remote.it"
+          Invoke-WebRequest -Uri $url -OutFile "remoteit.zip"
           
-          # 3. ربط وتفعيل السيرفر بحسابك الشخصي ومشاركة منفذ الـ RDP تلقائياً
+          # 3. فك الضغط عن الأداة وتجهيزها
+          Expand-Archive -Path "remoteit.zip" -DestinationPath ".\" -Force
+          
+          # 4. ربط وتفعيل السيرفر بحسابك عبر مفتاح التوثيق الخاص بك
           Write-Host "Connecting Server to your Remote.it Account..."
-          & "C:\Program Files\remoteit\remoteit.exe" register "TJBXSV2UM3PS"
-          & "C:\Program Files\remoteit\remoteit.exe" add --port 3389 --protocol tcp --name "Cloud-RDP"
+          .\remoteit.exe register "TJBXSV2UM3PS"
+          .\remoteit.exe add --port 3389 --protocol tcp --name "Cloud-RDP"
           
-          # 4. إبقاء الخادم حياً ومستقراً
+          # 5. إبقاء الخادم حياً ومستقراً
           python -c "import time; print('RDP Tunnel is live!'); time.sleep(14400)"
+
 
