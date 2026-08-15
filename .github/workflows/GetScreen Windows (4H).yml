@@ -18,13 +18,11 @@ jobs:
           
           # 2. تثبيت أداة كلوود فلير الرسمية تلقائياً بحجمها الكامل لضمان نجاح العملية
           Write-Host "Installing Cloudflared via Winget Package Manager..."
-          winget install --id Cloudflare.cloudflared --exact --accept-package-agreements --accept-source-agreements --silent
+          winget install --id Cloudflare.cloudflared --exact --accept-package-agreements --accept-source-agreements --silent --location US
           
-          # 3. بث النفق بنظام الـ Web RDP (للاتصال المباشر والآمن من المتصفح فورا)
-          Write-Host "Starting Secure RDP Tunnel... Please look for .trycloudflare.com link below:"
-          & "C:\Program Files (x86)\cloudflared\cloudflared.exe" tunnel --url http://localhost:3389
-
-
+          # 3. بث النفق بنظام الـ Browser RDP (للاتصال المباشر والآمن من المتصفح فورا وبدون برامج)
+          Write-Host "Starting Secure Browser-based RDP Tunnel..."
+          & "C:\Program Files (x86)\cloudflared\cloudflared.exe" tunnel --url rdp://localhost:3389
 
 
 
