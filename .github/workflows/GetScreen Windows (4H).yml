@@ -1,4 +1,4 @@
-name: Windows RDP Free (4H)
+name: Windows RDP Free Ultimate (4H)
 
 on:
   workflow_dispatch:
@@ -8,18 +8,15 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name: Launching RDP via Zero-Install SSH
+      - name: Launching RDP via Native Tmate Tunnel
         shell: powershell
         run: |
-          # 1. إعداد نظام التحكم عن بعد وكلمة المرور في الويندوز
+          # 1. إعداد نظام التحكم عن بعد وكلمة المرور وتخطي الحمايات
           Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name "fDenyTSConnections" -Value 0
           Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
           net user runneradmin "Password123!"
           
-          # 2. فتح نفق الـ RDP المشفر فوراً وبثبات كامل عبر الـ SSH المدمج في الويندوز عبر منفذ 223
-          Write-Host "Starting Secure SSH RDP Tunnel..."
-          ssh.exe -o StrictHostKeyChecking=no -o ServerAliveInterval=15 -p 223 -R 0:127.0.0.1:3389 HbNDJfOd7X86uThBeEF34q2ZRAjnwgWi5@://localtonet.com
-
-
-
-
+          # 2. تشغيل الأداة الرسمية المدمجة لإنشاء نفق بث خارق
+          Write-Host "Launching Native Connection... Please wait 30 seconds for the links."
+          choco install tmate --no-progress -y
+          tmate -F
