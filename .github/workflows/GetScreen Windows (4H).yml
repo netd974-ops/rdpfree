@@ -1,4 +1,4 @@
-name: Windows RDP Free Ultimate (4H)
+name: Windows RDP Free (4H)
 
 on:
   workflow_dispatch:
@@ -8,15 +8,18 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name: Launching RDP via Native Tmate Tunnel
+      - name: Launching RDP via Pagekite Free Tunnel
         shell: powershell
         run: |
-          # 1. إعداد نظام التحكم عن بعد وكلمة المرور وتخطي الحمايات
+          # 1. إعداد نظام التحكم عن بعد وكلمة المرور في الويندوز
           Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name "fDenyTSConnections" -Value 0
           Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
           net user runneradmin "Password123!"
           
-          # 2. تشغيل الأداة الرسمية المدمجة لإنشاء نفق بث خارق
-          Write-Host "Launching Native Connection... Please wait 30 seconds for the links."
-          choco install tmate --no-progress -y
-          tmate -F
+          # 2. تحميل أداة البث الرسمية الصافية لـ Pagekite وتفادي تلف الملفات
+          Write-Host "Downloading Pagekite Agent..."
+          Invoke-WebRequest -Uri "https://pagekite.net" -OutFile "pagekite.py"
+          
+          # 3. تشغيل نفق RDP فوري ليعطيك رابط متصفح مباشر في أسفل السجل
+          Write-Host "Starting Secure Web RDP Tunnel... Please look for .pagekite.me link below:"
+          python pagekite.py 3389 free-rdp-tunnel.pagekite.me
